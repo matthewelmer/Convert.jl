@@ -8,7 +8,7 @@ using LinearAlgebra
 # Based on Algorithm 9 of "Fundamentals of Astrodynamics and Applications".
 # For each of Ω and ω, if it's undefined, set it to zero.
 # Angles are output in radians.
-function cart2coes(cart::Vector{<:Real}, μ::Real, ε::Real=1e-12)
+function cart2coes(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     r_vec = cart[1:3]
     v_vec = cart[4:6]
 
@@ -84,7 +84,7 @@ function cart2coes(cart::Vector{<:Real}, μ::Real, ε::Real=1e-12)
 end
 
 # Validate input before calling cart2coes.
-function cart2coes_validated(cart::Vector{<:Real}, μ::Real, ε::Real=1e-12)
+function cart2coes_validated(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     if !all(isfinite, cart) || !isfinite(μ)
         @warn "Invalid input passed to cart2coes_validated."
         # TODO(melmer): Throw exception instead?
@@ -95,7 +95,7 @@ end
 
 # Based on Algorithm [TODO(melmer)] of "Fundamentals of Astrodynamics and
 # Applications".
-function coes2cart(coes::Vector{<:Real}, μ::Real, ε::Real=1e-12)
+function coes2cart(coes::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     a, e, i, ω, Ω, ν = coes
 
     circular = abs(e) < ε
@@ -143,7 +143,7 @@ function coes2cart(coes::Vector{<:Real}, μ::Real, ε::Real=1e-12)
 end
 
 # Validate input before calling coes2cart
-function coes2cart_validated(coes::Vector{<:Real}, μ::Real, ε::Real=1e-12)
+function coes2cart_validated(coes::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     if !all(isfinite, coes) || !isfinite(μ)
         @warn "Invalid input passed to coes2cart_validated"
         # TODO(melmer): Throw exception instead?
