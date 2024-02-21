@@ -3,7 +3,9 @@ export cart2coes, cart2coes_validated, coes2cart, coes2cart_validated
 
 using LinearAlgebra
 
-# TODO(m elmer): Use StaticArray
+# TODO(melmer): Add release branch
+
+# TODO(melmer): Use StaticArray
 
 # Based on Algorithm 9 of "Fundamentals of Astrodynamics and Applications".
 # For each of Ω and ω, if it's undefined, set it to zero.
