@@ -7,9 +7,17 @@ using LinearAlgebra
 
 # TODO(melmer): Use StaticArray
 
-# Based on Algorithm 9 of "Fundamentals of Astrodynamics and Applications".
-# For each of Ω and ω, if it's undefined, set it to zero.
-# Angles are output in radians.
+"""
+    cart2coes(cartesian_state_vector, μ, ε=1e-12)
+
+Based on Algorithm 9 of "Fundamentals of Astrodynamics and Applications".
+
+For each of Ω and ω, if it's undefined, set it to zero.
+
+Units in: [km, km, km, km/s, km/s, km/s]
+
+Units out: [km, n.d., rad, rad, rad, rad]
+"""
 function cart2coes(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     r_vec = cart[1:3]
     v_vec = cart[4:6]
@@ -95,8 +103,16 @@ function cart2coes_validated(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, �
     return cart2coes(cart, μ, ε)
 end
 
-# Based on Algorithm [TODO(melmer)] of "Fundamentals of Astrodynamics and
-# Applications".
+"""
+    coes2cart(coes, μ, ε=1e-12)
+
+Based on Algorithm [TODO(melmer)] of "Fundamentals of Astrodynamics and
+Applications".
+
+Units in: [km, n.d., rad, rad, rad, rad]
+
+Units out: [km, km, km, km/s, km/s, km/s]
+"""
 function coes2cart(coes::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     a, e, i, ω, Ω, ν = coes
 
