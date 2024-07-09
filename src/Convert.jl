@@ -66,7 +66,9 @@ function cart2coes(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::Abstrac
             ω = 2π - ω
         end
     else
-        ω = acos(n_vec ⋅ e_vec / (n * e))
+        # Enforce domain of acos input.
+        dot_over_mag_ratio = clamp(n_vec ⋅ e_vec / (n * e), -1, 1)
+        ω = acos(dot_over_mag_ratio)
         if e_vec[3] < 0.0
             ω = 2π - ω
         end
@@ -79,12 +81,16 @@ function cart2coes(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::Abstrac
             ν = 2π - ν
         end
     elseif circular
-        ν = acos(n_vec ⋅ r_vec / (n * r))
+        # Enforce domain of acos input.
+        dot_over_mag_ratio = clamp(n_vec ⋅ r_vec / (n * r), -1, 1)
+        ν = acos(dot_over_mag_ratio)
         if r_vec[3] < 0.0
             ν = 2π - ν
         end
     else
-        ν = acos(e_vec ⋅ r_vec / (e * r))
+        # Enforce domain of acos input.
+        dot_over_mag_ratio = clamp(e_vec ⋅ r_vec / (e * r), -1, 1)
+        ν = acos(dot_over_mag_ratio)
         if r_vec ⋅ v_vec < 0.0
             ν = 2π - ν
         end
@@ -116,14 +122,21 @@ Units out: [km, km, km, km/s, km/s, km/s]
 function coes2cart(coes::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::AbstractFloat=1e-12)
     a, e, i, ω, Ω, ν = coes
 
-    circular = abs(e) < ε
-    if circular
-        ω = 0.0
+    equatorial = abs(i) < ε || π - abs(i) < ε
+    if equatorial
+        # In the neighborhood of i = 0 or π, it makes sense to fold Ω into ω.
+        ω += Ω
+        Ω = 0.0
     end
 
-    equatorial = i < ε || π - i < ε
-    if equatorial
-        Ω = 0.0
+    circular = abs(e) < ε
+    if circular
+        # In the neighborhood of e = 0, it makes sense to fold ω into ν.
+        # NOTE(melmer): Addressing the equatorial neighborhood BEFORE addressing
+        # the circular neighborhood allows Ω to end up in ν as needed for the
+        # circular, equatorial case.
+        ν += ω
+        ω = 0.0
     end
 
     p = a * (1 - e^2)
