@@ -45,7 +45,7 @@ function cart2coes(cart::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::Abstrac
         a = 1 / (2/r - v^2/μ)
     end
 
-    i = acos(h_vec[3]/h)
+    i = acos(h_vec[3] / h)
 
     Ω = undef
     if equatorial
@@ -139,15 +139,15 @@ function coes2cart(coes::Vector{<:AbstractFloat}, μ::AbstractFloat, ε::Abstrac
         0.0
     ]
 
-    _11 = cos(Ω) * cos(ω) - sin(Ω) * sin(ω) * cos(i)
+    _11 =  cos(Ω) * cos(ω) - sin(Ω) * sin(ω) * cos(i)
     _12 = -cos(Ω) * sin(ω) - sin(Ω) * cos(ω) * cos(i)
-    _13 = sin(Ω) * sin(i)
-    _21 = sin(Ω) * cos(ω) + cos(Ω) * sin(ω) * cos(i)
+    _13 =  sin(Ω) * sin(i)
+    _21 =  sin(Ω) * cos(ω) + cos(Ω) * sin(ω) * cos(i)
     _22 = -sin(Ω) * sin(ω) + cos(Ω) * cos(ω) * cos(i)
     _23 = -cos(Ω) * sin(i)
-    _31 = sin(ω) * sin(i)
-    _32 = cos(ω) * sin(i)
-    _33 = cos(i)
+    _31 =  sin(ω) * sin(i)
+    _32 =  cos(ω) * sin(i)
+    _33 =  cos(i)
     ijk_pqw = [
         _11 _12 _13
         _21 _22 _23
